@@ -1,0 +1,15 @@
+{
+  "name": "practic5-nifi-parquet-js",
+  "version": "1.0.0",
+  "description": "JS-утилиты для batch-миграции MariaDB → Parquet и генерации NiFi шаблона.",
+  "type": "commonjs",
+  "scripts": {
+    "generate-parquet": "node generate_parquet.js",
+    "generate-template": "node generate_nifi_template.js",
+    "verify-parquet": "node verify_parquet.js",
+    "build": "npm run generate-parquet && npm run generate-template && npm run verify-parquet"
+  },
+  "dependencies": {
+    "parquetjs-lite": "^0.8.7"
+  }
+}

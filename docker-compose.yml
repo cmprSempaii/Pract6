@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: practic5-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: practic4
+      MYSQL_USER: student
+      MYSQL_PASSWORD: student
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./init-mariadb.sql:/docker-entrypoint-initdb.d/init-mariadb.sql:ro
+
+  nifi:
+    image: apache/nifi:2.5.0
+    container_name: practic5-nifi
+    restart: unless-stopped
+    environment:
+      NIFI_WEB_HTTP_HOST: "0.0.0.0"
+      NIFI_WEB_HTTP_PORT: "8080"
+      NIFI_CURSOR_HEAP_DUMP_PATH: "/opt/nifi/nifi-current/logs"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./parquet-output:/data/parquet-output
+      - ./nifi/drivers:/opt/nifi/nifi-current/lib
+    depends_on:
+      - mariadb
+
+volumes:
+  mariadb-data:
+    driver: local
